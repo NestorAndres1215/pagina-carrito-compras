@@ -1,131 +1,145 @@
-//Variables
-const carrito = document.querySelector("#carrito");
-const contenedorCarrito = document.querySelector("#lista-carrito tbody");
-const vaciarCarritoBtn = document.querySelector("#vaciar-carrito");
-const listaCursos = document.querySelector("#lista-cursos");
+// ==========================
+// CONSTANTES Y MENSAJES
+// ==========================
+const SELECTORS = {
+    carrito: "#carrito",
+    contenedorCarrito: "#lista-carrito tbody",
+    vaciarCarritoBtn: "#vaciar-carrito",
+    listaCursos: "#lista-cursos",
+    btnComprar: "#btn-comprar"
+};
+
+const MENSAJES = {
+    carritoVacio: "El carrito está vacío. Agrega productos antes de comprar.",
+    compraExitosa: "¡Gracias por tu compra!",
+    eliminarCurso: "Producto eliminado del carrito",
+    errorSubirImagen: "Error al procesar la imagen del producto",
+};
+
+// ==========================
+// VARIABLES
+// ==========================
+const carrito = document.querySelector(SELECTORS.carrito);
+const contenedorCarrito = document.querySelector(SELECTORS.contenedorCarrito);
+const vaciarCarritoBtn = document.querySelector(SELECTORS.vaciarCarritoBtn);
+const listaCursos = document.querySelector(SELECTORS.listaCursos);
+const btnComprar = document.querySelector(SELECTORS.btnComprar);
+
 let articulosCarrito = [];
-// Event listeners
+
+// ==========================
+// EVENT LISTENERS
+// ==========================
+document.addEventListener("DOMContentLoaded", () => {
+    actualizarBotonComprar();
+});
+
 listaCursos.addEventListener("click", agregarCurso);
 carrito.addEventListener("click", eliminarCurso);
 vaciarCarritoBtn.addEventListener("click", vaciarCarrito);
-//Funciones
+btnComprar.addEventListener("click", comprarCarrito);
+
+// ==========================
+// FUNCIONES PRINCIPALES
+// ==========================
 function agregarCurso(e) {
     e.preventDefault();
-    if (e.target.classList.contains("agregar-carrito")) {
-        const cursoSeleccionado = e.target.parentElement.parentElement;
+    if (!e.target.classList.contains("agregar-carrito")) return;
+
+    try {
+        const cursoSeleccionado = e.target.closest(".curso");
+        if (!cursoSeleccionado) throw new Error("No se pudo identificar el curso seleccionado.");
+
         leerDatosCurso(cursoSeleccionado);
+    } catch (error) {
+        console.error("Error al agregar curso:", error.message);
+        alert(error.message);
     }
 }
+
 function leerDatosCurso(curso) {
-    //Crea un objeto con el contenido del curso
-    const precioNuevo = curso.querySelector(".precio span").textContent;//Guardo el precio con $
+    const precioTexto = curso.querySelector(".precio span").textContent;
+    if (!precioTexto) throw new Error("Precio no disponible.");
+
     const infoCurso = {
-        imagen: curso.querySelector("img").src,
-        titulo: curso.querySelector("h4").textContent,
-        precio: precioNuevo.slice(1),//le quito el carcater $
-        id: curso.querySelector("a").getAttribute("data-id"),
+        imagen: curso.querySelector("img")?.src || "",
+        titulo: curso.querySelector("h4")?.textContent || "Sin título",
+        precio: parseFloat(precioTexto.replace("$", "")) || 0,
+        id: curso.querySelector("a")?.dataset.id || "",
         cantidad: 1,
     };
-    //Revisa si un elemento ya existe en el carrito
-    const existe = articulosCarrito.some(curso => curso.id === infoCurso.id)
+
+    if (!infoCurso.id) throw new Error("ID del curso no encontrado.");
+
+    const existe = articulosCarrito.some(c => c.id === infoCurso.id);
+
     if (existe) {
-        //Actualiza la cantidad
-        articulosCarrito.map(curso => {
-            if (curso.id === infoCurso.id) {
-                curso.cantidad++;
-                const precioNumero = Number.parseInt(infoCurso.precio);//Convertir string a int
-                curso.precio = precioNumero * curso.cantidad;
-                return curso;
+        articulosCarrito = articulosCarrito.map(c => {
+            if (c.id === infoCurso.id) {
+                c.cantidad++;
+                c.precio = c.precio * c.cantidad;
             }
-            else {
-                return curso;
-            }
+            return c;
         });
-    }
-    else {
-        articulosCarrito.push(infoCurso); //Agrega elementos al array
+    } else {
+        articulosCarrito.push(infoCurso);
     }
 
-    carritoHTML(); //Llama funcion que guarda en el icono carrito
+    carritoHTML();
 }
-document.addEventListener("DOMContentLoaded", () => {
-    const btnComprar = document.getElementById("btn-comprar");
-
-
-
-    btnComprar.addEventListener("click", () => {
-        if (articulosCarrito.length === 0) {
-            alert("El carrito está vacío. Agrega productos antes de comprar.");
-        } else {
-            alert("¡Gracias por tu compra!");
-            articulosCarrito.length = 0; // Vaciar el carrito
-            carritoHTML(); // Volver a renderizar
-        }
-    });
-});
 
 function carritoHTML() {
-    // Limpiar HTML
     limpiarHTML();
 
-    const btnComprar = document.getElementById("btn-comprar");
-
-    // Recorrer los artículos del carrito
-    articulosCarrito.forEach((curso) => {
+    articulosCarrito.forEach(curso => {
         const row = document.createElement("tr");
-
         row.innerHTML = `
-            <td style="text-align: center; vertical-align: middle;">
-                <img src="${curso.imagen}" width="100">
-            </td>
-            <td style="text-align: center; vertical-align: middle;">
-                ${curso.titulo}
-            </td>
-            <td style="text-align: center; vertical-align: middle;">
-                $ ${curso.precio}
-            </td>
-            <td style="text-align: center; vertical-align: middle;">
-                ${curso.cantidad}
-            </td>
-            <td style="text-align: center; vertical-align: middle;">
-                <a href="#" class="borrar-curso" style="
-                    background-color: #dc3545;
-                    color: white;
-                    padding: 8px 16px;
-                    border-radius: 4px;
-                    text-decoration: none;
-                    font-size: 14px;
-                    display: inline-block;
-                    transition: background-color 0.3s ease, transform 0.2s ease;
-                "data-id="${curso.id}"> ELIMINAR </a>
+            <td style="text-align: center;"><img src="${curso.imagen}" width="100"></td>
+            <td style="text-align: center;">${curso.titulo}</td>
+            <td style="text-align: center;">$ ${curso.precio}</td>
+            <td style="text-align: center;">${curso.cantidad}</td>
+            <td style="text-align: center;">
+                <a href="#" class="borrar-curso" data-id="${curso.id}" 
+                style="background-color:#dc3545;color:white;padding:8px 16px;border-radius:4px;text-decoration:none;">ELIMINAR</a>
             </td>
         `;
-
         contenedorCarrito.appendChild(row);
     });
 
-    // Mostrar u ocultar el botón de COMPRAR según haya productos en el carrito
-    btnComprar.style.display = articulosCarrito.length > 0 ? "block" : "none";
+    actualizarBotonComprar();
 }
 
-
-//Elimina los cursos del tbody
 function limpiarHTML() {
     contenedorCarrito.innerHTML = "";
 }
-//Elimina los cursos seleccionados del carrito
+
 function eliminarCurso(e) {
-    if (e.target.classList.contains('borrar-curso')) {
-        const cursoId = e.target.getAttribute("data-id");
-        //elimina del arreglo de articulosCarrito por el data-id
-        articulosCarrito = articulosCarrito.filter(curso => curso.id !== cursoId);
-        carritoHTML();//iterar sobre el carrito el HTML
-    }
+    if (!e.target.classList.contains("borrar-curso")) return;
+
+    const cursoId = e.target.dataset.id;
+    articulosCarrito = articulosCarrito.filter(c => c.id !== cursoId);
+
+    carritoHTML();
+    console.log(MENSAJES.eliminarCurso);
 }
-// Vacia elementos del carrito
-function vaciarCarrito(e) {
-    if (e.target.classList.contains('button1')) {
-        articulosCarrito = [];
-        carritoHTML();
+
+function vaciarCarrito() {
+    articulosCarrito = [];
+    carritoHTML();
+}
+
+function comprarCarrito() {
+    if (articulosCarrito.length === 0) {
+        alert(MENSAJES.carritoVacio);
+        return;
     }
+
+    alert(MENSAJES.compraExitosa);
+    articulosCarrito = [];
+    carritoHTML();
+}
+
+function actualizarBotonComprar() {
+    if (!btnComprar) return;
+    btnComprar.style.display = articulosCarrito.length > 0 ? "block" : "none";
 }
