@@ -1,0 +1,478 @@
+---
+
+---
+
+<header id="header" class="header">
+    <div class="header-inner">
+        <a href="/" class="header-logo">
+            <div class="logo-mark">
+                <span class="logo-initials">UP</span>
+                <div class="logo-text">
+                    <span class="logo-name">Universidad</span>
+                    <span class="logo-surname">de Programación</span>
+                </div>
+            </div>
+        </a>
+        <nav class="header-nav">
+            <div class="cart-wrapper submenu">
+                <button class="cart-btn" aria-label="Abrir carrito">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+                <div id="carrito" class="carrito-dropdown">
+                    <div class="carrito-header">
+                        <span class="carrito-title">Tu Carrito</span>
+                        <button class="carrito-close" id="carrito-close">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <div class="carrito-body">
+                        <table id="lista-carrito">
+                            <thead>
+                                <tr>
+                                    <th>Imagen</th>
+                                    <th>Producto</th>
+                                    <th>Precio</th>
+                                    <th>Cant.</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                    <div class="carrito-footer">
+                        <a href="#" id="btn-comprar" class="btn-comprar">
+                            <span>Comprar</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="#" id="vaciar-carrito" class="btn-vaciar">Vaciar carrito</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Montserrat:wght@300;400;500&display=swap");
+
+    :root {
+        --gold: #c9a96e;
+        --gold-dim: #c9a96e33;
+        --bg-dark: #0e0e0e;
+        --bg-panel: #161616;
+        --border: #2a2a2a;
+        --text-main: #e8e0d4;
+        --text-muted: #666;
+    }
+
+    .header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: var(--bg-dark);
+        border-bottom: 1px solid var(--border);
+        font-family: "Montserrat", sans-serif;
+    }
+
+    .header-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    /* Logo */
+    .header-logo {
+        display: flex;
+        align-items: center;
+    }
+
+    .header-logo img {
+        height: 42px;
+        width: auto;
+        object-fit: contain;
+        filter: brightness(0.9);
+        transition: filter 0.3s ease;
+    }
+
+    .header-logo:hover img {
+        filter: brightness(1.1);
+    }
+
+    .header-logo {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .logo-mark {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+    }
+
+    .logo-initials {
+        font-family: var(--font-display);
+        font-size: 1.4rem;
+        font-weight: 300;
+        letter-spacing: 0.25em;
+        color: var(--gold);
+        border: 1px solid var(--gold-border);
+        padding: 0.3rem 0.65rem;
+        line-height: 1;
+        transition:
+            border-color 0.3s,
+            background 0.3s;
+    }
+
+    .header-logo:hover .logo-initials {
+        border-color: var(--gold);
+        background: var(--gold-dim);
+    }
+
+    .logo-text {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+    }
+
+    .logo-name {
+        font-family: var(--font-display);
+        font-size: 0.95rem;
+        font-weight: 300;
+        letter-spacing: 0.12em;
+        color: var(--text-main);
+        line-height: 1;
+    }
+
+    .logo-surname {
+        font-family: var(--font-body);
+        font-size: 0.55rem;
+        font-weight: 400;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        line-height: 1;
+    }
+    .header-nav {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    /* Cart button */
+    .cart-wrapper {
+        position: relative;
+    }
+
+    .cart-btn {
+        background: none;
+        border: 1px solid var(--border);
+        color: var(--text-main);
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+        transition:
+            border-color 0.3s,
+            background 0.3s;
+    }
+
+    .cart-btn:hover {
+        border-color: var(--gold);
+        background: var(--gold-dim);
+    }
+
+    .cart-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .cart-count {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        background: var(--gold);
+        color: #0e0e0e;
+        font-size: 0.6rem;
+        font-weight: 500;
+        min-width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        letter-spacing: 0;
+    }
+
+    /* Dropdown */
+    .carrito-dropdown {
+        display: none;
+        position: absolute;
+        top: calc(100% + 16px);
+        right: 0;
+        width: 520px;
+        background: var(--bg-panel);
+        border: 1px solid var(--border);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        z-index: 200;
+        animation: dropIn 0.25s ease;
+    }
+
+    .cart-wrapper.open .carrito-dropdown {
+        display: flex;
+        flex-direction: column;
+    }
+
+    @keyframes dropIn {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .carrito-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.2rem 1.5rem;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .carrito-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.1rem;
+        font-weight: 300;
+        letter-spacing: 0.15em;
+        color: var(--gold);
+        text-transform: uppercase;
+    }
+
+    .carrito-close {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        cursor: pointer;
+        padding: 0.2rem 0.4rem;
+        transition: color 0.2s;
+    }
+
+    .carrito-close:hover {
+        color: var(--text-main);
+    }
+
+    /* Table */
+    .carrito-body {
+        padding: 1rem 1.5rem;
+        max-height: 280px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border) transparent;
+    }
+
+    #lista-carrito {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.75rem;
+        color: var(--text-main);
+    }
+
+    #lista-carrito thead tr {
+        border-bottom: 1px solid var(--border);
+    }
+
+    #lista-carrito th {
+        font-weight: 400;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        padding: 0.5rem 0.6rem;
+        font-size: 0.65rem;
+        text-align: left;
+    }
+
+    #lista-carrito td {
+        padding: 0.75rem 0.6rem;
+        border-bottom: 1px solid var(--border);
+        vertical-align: middle;
+    }
+
+    #lista-carrito tbody tr:last-child td {
+        border-bottom: none;
+    }
+    .carrito-footer {
+        padding: 1.2rem 1.5rem;
+        border-top: 1px solid var(--border);
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .btn-comprar {
+        flex: 1;
+        background: var(--gold);
+        color: #0e0e0e;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        font-size: 0.7rem;
+        font-weight: 500;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        transition:
+            background 0.3s,
+            opacity 0.3s;
+    }
+
+    .btn-comprar:hover {
+        opacity: 0.85;
+    }
+
+    .btn-vaciar {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.65rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        transition: color 0.2s;
+        white-space: nowrap;
+    }
+
+    .btn-vaciar:hover {
+        color: var(--text-main);
+    }
+
+    @media (max-width: 560px) {
+        .carrito-dropdown {
+            width: calc(100vw - 2rem);
+            right: -1rem;
+        }
+        .header-inner {
+            padding: 0 1rem;
+        }
+    }
+</style>
+
+<script>
+    const wrapper = document.querySelector(".cart-wrapper");
+    const closeBtn = document.getElementById("carrito-close");
+
+    document.querySelector(".cart-btn")?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        wrapper?.classList.toggle("open");
+    });
+
+    closeBtn?.addEventListener("click", () =>
+        wrapper?.classList.remove("open"),
+    );
+
+    document.addEventListener("click", (e) => {
+        if (!wrapper?.contains(e.target)) wrapper?.classList.remove("open");
+    });
+
+    // Selecciones
+    const carrito = document.querySelector("#carrito tbody");
+    const cartCount = document.getElementById("cart-count");
+    const vaciarCarritoBtn = document.getElementById("vaciar-carrito");
+    const btnComprar = document.getElementById("btn-comprar");
+
+    let carritoItems = [];
+
+    // Función para actualizar la tabla del carrito
+    function actualizarCarrito() {
+        // Limpiar la tabla
+        carrito.innerHTML = "";
+
+        carritoItems.forEach((item, index) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+        <td><img src="${item.imagen}" alt="${item.titulo}" width="40"></td>
+        <td>${item.titulo}</td>
+        <td>$${item.precio}</td>
+        <td>
+          <input type="number" min="1" value="${item.cantidad}" data-index="${index}" class="cantidad-input">
+        </td>
+        <td><button class="btn-eliminar" data-index="${index}">✕</button></td>
+      `;
+            carrito.appendChild(tr);
+        });
+
+        cartCount.textContent = carritoItems.length;
+
+        // Eventos de inputs y eliminar
+        document.querySelectorAll(".cantidad-input").forEach((input) => {
+            input.addEventListener("change", (e) => {
+                const idx = e.target.dataset.index;
+                carritoItems[idx].cantidad = parseInt(e.target.value) || 1;
+            });
+        });
+
+        document.querySelectorAll(".btn-eliminar").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                const idx = e.target.dataset.index;
+                carritoItems.splice(idx, 1);
+                actualizarCarrito();
+            });
+        });
+    }
+
+    // Vaciar carrito
+    vaciarCarritoBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        carritoItems = [];
+        actualizarCarrito();
+    });
+
+    // Comprar
+    btnComprar.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (carritoItems.length === 0) return alert("El carrito está vacío");
+        alert("Gracias por tu compra");
+        carritoItems = [];
+        actualizarCarrito();
+    });
+
+    // Agregar productos desde Card
+    document.querySelectorAll(".agregar-carrito").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+            const card = e.currentTarget.closest(".curso-card");
+            const producto = {
+                id: btn.dataset.id,
+                titulo: card.querySelector(".curso-titulo").textContent,
+                precio: card
+                    .querySelector(".precio-actual")
+                    .textContent.replace("$", ""),
+                imagen: card.querySelector("img").src,
+                cantidad: 1,
+            };
+
+            // Revisar si ya está en el carrito
+            const existe = carritoItems.find((i) => i.id === producto.id);
+            if (existe) {
+                existe.cantidad += 1;
+            } else {
+                carritoItems.push(producto);
+            }
+
+            actualizarCarrito();
+
+            // Abrir dropdown al agregar
+            document.querySelector(".cart-wrapper")?.classList.add("open");
+        });
+    });
+</script>

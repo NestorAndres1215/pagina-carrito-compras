@@ -1,0 +1,86 @@
+---
+
+---
+
+<footer id="footer" class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="footer-initials">NAT</span>
+            <p class="footer-name">Nestor Atiro Talla</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <p class="footer-copy">&copy; 2025 — Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Montserrat:wght@300;400&display=swap");
+
+    .footer {
+        background: #0e0e0e;
+        padding: 3rem 2rem;
+        font-family: "Montserrat", sans-serif;
+    }
+
+    .footer-inner {
+        max-width: 900px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .footer-initials {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.6rem;
+        font-weight: 300;
+        letter-spacing: 0.3em;
+        color: #c9a96e;
+        border: 1px solid #c9a96e44;
+        padding: 0.3rem 0.7rem;
+    }
+
+    .footer-name {
+        font-size: 0.75rem;
+        font-weight: 300;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #aaa;
+        margin: 0;
+    }
+
+    .footer-divider {
+        width: 1px;
+        height: 30px;
+        background: #333;
+    }
+
+    .footer-copy {
+        font-size: 0.7rem;
+        font-weight: 300;
+        letter-spacing: 0.15em;
+        color: #555;
+        margin: 0;
+    }
+
+    @media (max-width: 480px) {
+        .footer-divider {
+            display: none;
+        }
+        .footer-inner {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+    }
+</style>

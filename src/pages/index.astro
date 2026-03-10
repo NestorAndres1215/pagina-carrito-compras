@@ -1,0 +1,72 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Footer from '../components/Footer.astro';
+import CursoCard from '../components/CursoCard.astro';
+
+const cursos = [
+  {
+    id: 1,
+    imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYHEUb0jrugl08rV0WhNS1iwyoCy2NiF_uxA&s",
+    titulo: "Introducción a Python",
+    autor: "Juan Pedro",
+    precio: 15
+  },
+  {
+    id: 2,
+    imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTS-4zSTwh1fmWXFtHHH1bDXxCRw0ID8Ri3Fw&s",
+    titulo: "JavaScript Avanzado",
+    autor: "Juan Pedro",
+    precio: 15
+  },
+  {
+    id: 3,
+    imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGqVYJORLYdYRbVKw_4RHHklbpVKC7AL7hNQ&s",
+    titulo: "Desarrollo Web con React",
+    autor: "Juan Pedro",
+    precio: 15
+  },
+];
+---
+
+<MainLayout>
+  <Header slot="header" />
+
+  <main slot="main">
+    <Hero />
+    <section id="lista-cursos" class="section">
+      <div class="container">
+
+        <p class="section-label">Catálogo</p>
+        <h2 class="seccion-titulo">Cursos de<br/><em>Programación</em></h2>
+        <span class="accent-line"></span>
+
+        <div class="cursos-grid">
+          {cursos.map(curso => <CursoCard {...curso} />)}
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</MainLayout>
+
+<style>
+  .seccion-titulo {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    line-height: 1.15;
+    margin-bottom: 0;
+  }
+
+  .seccion-titulo em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .cursos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+</style>
